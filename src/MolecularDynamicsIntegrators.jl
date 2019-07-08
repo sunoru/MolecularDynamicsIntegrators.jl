@@ -1,15 +1,17 @@
 module MolecularDynamicsIntegrators
 
+import Reexport: @reexport
+
 include("./Bases.jl")
-@reexport .Bases
+@reexport using .Bases
 
 include("./Types.jl")
-@reexport .Types
+@reexport using .Types
 
 include("./Verlet/Verlet.jl")
-@reexport .Verlet
+@reexport using .Verlet
 
 include("./RATTLE/RATTLE.jl")
-@reexport .RATTLE
+@reexport using .RATTLE
 
 end

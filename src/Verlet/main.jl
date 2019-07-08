@@ -24,7 +24,7 @@ function move!(integrator::VerletIntegrator)
     a = acceleration(fv, m)
     _move_half_step!(r, v, a, dt)
 
-    fv .= ff(r)
+    fv .= f(r)
 
     a = acceleration(fv, m)
     _move_full_step!(r, v, a, dt)

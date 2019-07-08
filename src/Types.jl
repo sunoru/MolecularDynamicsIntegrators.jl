@@ -1,6 +1,6 @@
 module Types
 
-export AbstractIntegrator, move!
+export AbstractIntegrator, move!, AbstractConstraint, FixedDistanceConstraint
 
 import ..Bases: RealType, Vector3s
 
@@ -12,16 +12,16 @@ abstract type AbstractIntegrator{N, M <: Function, F <: Function} end
 @inline function acceleration(forces::Vector3s{N}, m::M) where {N, M <: Function}
     a = zeros(Vector3s{N})
     @inbounds for i = 1:N
-        a[i] = fv[i] / m(i)
+        a[i] = forces[i] / m(i)
     end
     a
 end
 
 move!(::AbstractIntegrator) = error("Unimplemented")
 
-abstract type Constraint end
+abstract type AbstractConstraint end
 
-struct FixedDistanceConstraint <: Constraint
+struct FixedDistanceConstraint <: AbstractConstraint
     i::Int
     j::Int
     distance::RealType

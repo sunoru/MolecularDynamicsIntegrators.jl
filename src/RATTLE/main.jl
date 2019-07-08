@@ -1,6 +1,6 @@
 import LinearAlgebra: norm_sqr, ⋅
 
-import ..Bases: RealType, Vector3s, SVector
+import ..Bases: RealType, Vector3s, SVector, MVector
 import ..Types: move!, acceleration, FixedDistanceConstraint
 
 import ..Verlet
@@ -8,9 +8,9 @@ import ..Verlet
 
 @inline function _move_half_step!(
     r::Vector3s{N}, v::Vector3s{N}, a::Vector3s{N},
-    dt::RealType, tolerance::RealType,
+    dt::RealType, tolerance::RealType, m::M,
     max_iter::Int, last_r::Vector3s{N}, constraints::SVector{K, FixedDistanceConstraint}
-) where {N, K}
+) where {N, M <: Function, K}
     moved = zeros(MVector{K, Bool})
     iter = 0
     correcting = true
@@ -45,9 +45,9 @@ end
 
 @inline function _move_full_step!(
     r::Vector3s{N}, v::Vector3s{N}, a::Vector3s{N},
-    dt::RealType, tolerance::RealType,
+    dt::RealType, tolerance::RealType, m::M,
     max_iter::Int, constraints::SVector{K, FixedDistanceConstraint}
-) where {N, K}
+) where {N, M <: Function, K}
     moved = zeros(MVector{K, Bool})
     iter = 0
     correcting = true
@@ -76,7 +76,7 @@ end
 end
 
 
-function move!(integrator::RattleIntegrator{N, K})
+function move!(integrator::RattleIntegrator)
     r = integrator.positions
     v = integrator.velocities
     dt = integrator.timestep
@@ -91,12 +91,12 @@ function move!(integrator::RattleIntegrator{N, K})
 
     a = acceleration(fv, m)
     Verlet._move_half_step!(r, v, a, dt)
-    _move_half_step!(r, v, a, dt, tol, max_iter, last_r, constraints)
+    _move_half_step!(r, v, a, dt, tol, m, max_iter, last_r, constraints)
 
     fv .= f(r)
     a = acceleration(fv, m)
     Verlet._move_full_step!(r, v, a, dt)
-    _move_full_step!(r, v, a, dt, tol, max_iter, constraints)
+    _move_full_step!(r, v, a, dt, tol, m, max_iter, constraints)
 
     integrator
 end
