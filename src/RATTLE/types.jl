@@ -1,16 +1,23 @@
-import ..Bases: RealType, Vector3s
-import ..Types: AbstractIntegrator
+import ..Bases: RealType, Vector3s, SVector
+import ..Types: AbstractIntegrator, FixedDistanceConstraint
 
-mutable struct RattleIntegrator{N, F <: Function, G <: Function, dG <: Function} <: AbstractIntegrator{N, F, G, dG}
+
+# The constraints can only be of the type that require fixed distances.
+mutable struct RattleIntegrator{N, K, M <: Function, F <: Function} <: AbstractIntegrator{N, M, F}
     positions::Vector3s{N}
     velocities::Vector3s{N}
     timestep::RealType
-    acceleration_function::F  # Use acceleration instead of force to include masses.
-    tolerance::RealType
-    constraint::G
-    constraint_gradient::dG
 
-    accelerations::Vector3s{N}
+    mass_function::M
+    force_function::F
+
+    tolerance::RealType
+    max_iterations::Int
+    constraints::SVector{K, FixedDistanceConstraint}
+
+    forces::Vector3s{N}
 end
 
-RattleIntegrator(r, v, dt, af) = RattleIntegrator(r, v, dt, af, af(r))
+RattleIntegrator(
+    r, v, dt, m, f, ξ, max_iter, gs
+) = RattleIntegrator(r, v, dt, m, f, ξ, max_iter, gs, f(r))
