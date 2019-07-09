@@ -7,20 +7,21 @@ import ..Verlet
 
 
 @inline function _move_half_step!(
-    r::Vector3s{N}, v::Vector3s{N}, a::Vector3s{N},
+    r::Vector3s{N}, v::Vector3s{N},
     dt::RealType, tolerance::RealType, m::M,
     max_iter::Int, last_r::Vector3s{N}, constraints::SVector{K, FixedDistanceConstraint}
 ) where {N, M <: Function, K}
-    moved = zeros(MVector{K, Bool})
+    moved = ones(MVector{N, Bool})
+    moving = zeros(MVector{N, Bool})
     iter = 0
     correcting = true
     while correcting && iter < max_iter
         iter += 1
         correcting = false
         @inbounds for ki in 1:K
-            moved[ki] && continue
             constraint = constraints[ki]
             i, j, d = constraint.i, constraint.j, constraint.distance
+            !(moved[i] || moved[j]) && continue
             d² = d ^ 2
             ξ = 2 * tolerance * d²
             rij = last_r[i] - last_r[j]
@@ -29,7 +30,7 @@ import ..Verlet
             c = norm_sqr(s) - d²
             if abs(c) ≥ ξ
                 correcting = true
-                moved[ki] = true
+                moving[i] = moving[j] = true
                 g = c / 2dt / (s ⋅ rij) / (rmi + rmj)
                 dvi = -rij * rmi * g
                 dvj = rij * rmj * g
@@ -39,25 +40,28 @@ import ..Verlet
                 r[j] += dvj * dt
             end
         end
+        moved .= moving
+        moving .= false
     end
 end
 
 
 @inline function _move_full_step!(
-    r::Vector3s{N}, v::Vector3s{N}, a::Vector3s{N},
-    dt::RealType, tolerance::RealType, m::M,
+    r::Vector3s{N}, v::Vector3s{N},
+    tolerance::RealType, m::M,
     max_iter::Int, constraints::SVector{K, FixedDistanceConstraint}
 ) where {N, M <: Function, K}
-    moved = zeros(MVector{K, Bool})
+    moved = ones(MVector{N, Bool})
+    moving = zeros(MVector{N, Bool})
     iter = 0
     correcting = true
     while correcting && iter < max_iter
         iter += 1
         correcting = false
         @inbounds for ki in 1:K
-            moved[ki] && continue
             constraint = constraints[ki]
             i, j, d = constraint.i, constraint.j, constraint.distance
+            !(moved[i] || moved[j]) && continue
             d² = d ^ 2
             ξ = tolerance * d²
             rij = r[i] - r[j]
@@ -66,12 +70,14 @@ end
             c = rij ⋅ vij
             if abs(c) ≥ ξ
                 correcting = true
-                moved[ki] = true
+                moving[i] = moving[j] = true
                 k = c / d² / (rmi + rmj)
                 v[i] += -rij * rmi * k
                 v[j] += rij * rmj * k
             end
         end
+        moved .= moving
+        moving .= false
     end
 end
 
@@ -91,12 +97,12 @@ function move!(integrator::RattleIntegrator)
 
     a = acceleration(fv, m)
     Verlet._move_half_step!(r, v, a, dt)
-    _move_half_step!(r, v, a, dt, tol, m, max_iter, last_r, constraints)
+    _move_half_step!(r, v, dt, tol, m, max_iter, last_r, constraints)
 
     fv .= f(r)
     a = acceleration(fv, m)
     Verlet._move_full_step!(r, v, a, dt)
-    _move_full_step!(r, v, a, dt, tol, m, max_iter, constraints)
+    _move_full_step!(r, v, tol, m, max_iter, constraints)
 
     integrator
 end
