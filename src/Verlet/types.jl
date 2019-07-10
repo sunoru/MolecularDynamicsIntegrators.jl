@@ -1,4 +1,4 @@
-import ..Bases: RealType, Vector3s
+import ..Bases: RealType, Vector3s, make_vector
 import ..Types: AbstractIntegrator
 
 mutable struct VerletIntegrator{N, M <: Function, F <: Function} <: AbstractIntegrator{N, M, F}
@@ -12,4 +12,4 @@ mutable struct VerletIntegrator{N, M <: Function, F <: Function} <: AbstractInte
     forces::Vector3s{N}
 end
 
-VerletIntegrator(r, v, dt, m, f) = VerletIntegrator(r, v, dt, m, f, f(r))
+VerletIntegrator(r, v, dt, m, f) = VerletIntegrator(make_vector(r), make_vector(v), dt, m, make_vector ∘ f, make_vector(f(r)))

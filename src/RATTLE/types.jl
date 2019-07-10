@@ -1,4 +1,4 @@
-import ..Bases: RealType, Vector3s, SVector
+import ..Bases: RealType, Vector3s, SVector, make_vector, make_svector
 import ..Types: AbstractIntegrator, FixedDistanceConstraint
 
 
@@ -20,4 +20,4 @@ end
 
 RattleIntegrator(
     r, v, dt, m, f, ξ, max_iter, gs
-) = RattleIntegrator(r, v, dt, m, f, ξ, max_iter, gs, f(r))
+) = RattleIntegrator(make_vector(r), make_vector(v), dt, m, make_vector ∘ f, ξ, max_iter, make_svector(gs), make_vector(f(r)))
