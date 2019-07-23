@@ -2,13 +2,13 @@ import ..Bases: RealType, Vector3s
 import ..Types: move!, acceleration
 
 
-@inline function _move_half_step!(r::Vector3s{N}, v::Vector3s{N}, a::Vector3s{N}, dt::RealType) where N
+@inline function _move_half_step!(r::Vector3s, v::Vector3s, a::Vector3s, dt::RealType)
     v .+= a * dt / 2
     r .+= v * dt
     r, v
 end
 
-@inline function _move_full_step!(r::Vector3s{N}, v::Vector3s{N}, a::Vector3s{N}, dt::RealType) where N
+@inline function _move_full_step!(r::Vector3s, v::Vector3s, a::Vector3s, dt::RealType)
     v .+= a * dt / 2
     r, v
 end

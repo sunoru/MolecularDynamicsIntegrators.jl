@@ -1,15 +1,21 @@
-import ..Bases: RealType, Vector3s, make_vector
+import ..Bases: RealType, Vector3s
 import ..Types: AbstractIntegrator
 
-mutable struct VerletIntegrator{N, M <: Function, F <: Function} <: AbstractIntegrator{N, M, F}
-    positions::Vector3s{N}
-    velocities::Vector3s{N}
+struct VerletIntegrator{N, M <: Function, F <: Function} <: AbstractIntegrator{N, M, F}
+    positions::Vector3s
+    velocities::Vector3s
     timestep::RealType
 
     mass_function::M
     force_function::F
 
-    forces::Vector3s{N}
+    forces::Vector3s
 end
 
-VerletIntegrator(r, v, dt, m, f) = VerletIntegrator(make_vector(r), make_vector(v), dt, m, make_vector ∘ f, make_vector(f(r)))
+function VerletIntegrator(r, v, dt, m, f)
+    N = length(r)
+    @assert length(v) === N
+    fs = f(r)
+    @assert length(fs) === N
+    VerletIntegrator{N, typeof(m), typeof(f)}(r, v, dt, m, f, fs)
+end

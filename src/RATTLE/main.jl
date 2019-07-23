@@ -1,18 +1,20 @@
 import LinearAlgebra: norm_sqr, ⋅
 
-import ..Bases: RealType, Vector3s, SVector, MVector
+import ..Bases: RealType, Vector3s
 import ..Types: move!, acceleration, FixedDistanceConstraint
 
 import ..Verlet
 
 
 @inline function _move_half_step!(
-    r::Vector3s{N}, v::Vector3s{N},
+    r::Vector3s, v::Vector3s,
     dt::RealType, tolerance::RealType, m::M,
-    max_iter::Int, last_r::Vector3s{N}, constraints::SVector{K, FixedDistanceConstraint}
-) where {N, M <: Function, K}
-    moved = ones(MVector{N, Bool})
-    moving = zeros(MVector{N, Bool})
+    max_iter::Int, last_r::Vector3s, constraints::Vector{FixedDistanceConstraint}
+) where {M <: Function}
+    N = length(r)
+    K = length(constraints)
+    moved = ones(Bool, N)
+    moving = zeros(Bool, N)
     iter = 0
     correcting = true
     while correcting && iter < max_iter
@@ -47,12 +49,14 @@ end
 
 
 @inline function _move_full_step!(
-    r::Vector3s{N}, v::Vector3s{N},
+    r::Vector3s, v::Vector3s,
     tolerance::RealType, m::M,
-    max_iter::Int, constraints::SVector{K, FixedDistanceConstraint}
-) where {N, M <: Function, K}
-    moved = ones(MVector{N, Bool})
-    moving = zeros(MVector{N, Bool})
+    max_iter::Int, constraints::Vector{FixedDistanceConstraint}
+) where {M <: Function}
+    N = length(r)
+    K = length(constraints)
+    moved = ones(Bool, N)
+    moving = zeros(Bool, N)
     iter = 0
     correcting = true
     while correcting && iter < max_iter
