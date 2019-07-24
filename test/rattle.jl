@@ -1,20 +1,21 @@
 import LinearAlgebra: ⋅, norm_sqr
 
 import MolecularDynamicsIntegrators: move!, RattleIntegrator, FixedDistanceConstraint
+import MolecularDynamicsIntegrators.Bases: Vector3
 
 N = 4
 d = 1.0
 r = [
-    [0, 0, 0],
-    [0, 1, 0],
-    [0, 2, 0],
-    [0, 3, 0]
+    Vector3(0, 0, 0),
+    Vector3(0, 1, 0),
+    Vector3(0, 2, 0),
+    Vector3(0, 3, 0)
 ]
 v = [
-    [0, 0, 0],
-    [0.5, 0, 0.8],
-    [0.9, 0, -0.4],
-    [0.6, 0, -0.6]
+    Vector3(0, 0, 0),
+    Vector3(0.5, 0, 0.8),
+    Vector3(0.9, 0, -0.4),
+    Vector3(0.6, 0, -0.6)
 ]
 dt = 0.001
 mass = i -> 1.0

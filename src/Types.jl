@@ -9,9 +9,8 @@ import ..Bases: RealType, Vector3s, Vector3
 # cases like all the masses are the same.
 abstract type AbstractIntegrator{N, M <: Function, F <: Function} end
 
-@inline function acceleration(forces::Vector3s, m::M) where {M <: Function}
-    N = length(forces)
-    a = zeros(Vector3, N)
+@inline function acceleration(forces::Vector3s{N}, m::M) where {N, M <: Function}
+    a = zeros(Vector3s{N})
     @inbounds for i = 1:N
         a[i] = forces[i] / m(i)
     end

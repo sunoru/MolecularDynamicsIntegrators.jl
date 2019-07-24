@@ -2,14 +2,15 @@ import Random
 import Test: @test
 
 import MolecularDynamicsIntegrators: move!, VerletIntegrator
+import MolecularDynamicsIntegrators.Bases: Vector3
 
 Random.seed!(2017012811)
 
 N = 3
 r = [
-    [0, 0, 0],
-    [0, 1, 0],
-    [0, 1, 1]
+    Vector3(0, 0, 0),
+    Vector3(0, 1, 0),
+    Vector3(0, 1, 1)
 ]
 v = [rand(3) for _ in 1:N]
 dt = 0.001
