@@ -1,30 +1,18 @@
 module Types
 
-export AbstractIntegrator, move!, AbstractConstraint, FixedDistanceConstraint
+export AbstractIntegrator, move!, current_positions, current_velocities
 
 import ..Bases: RealType, Vector3s, Vector3
 
-# N: number of particles; M: Mass function; F: Force function
+# M: Mass function; F: Force function
 # Accept mass as a function (index -> value) instead of an array in order to perform better in special
-# cases like all the masses are the same.
-abstract type AbstractIntegrator{N, M <: Function, F <: Function} end
+# cases like that all the masses are the same.
+abstract type AbstractIntegrator{M <: Function, F <: Function} end
 
-@inline function acceleration(forces::Vector3s{N}, m::M) where {N, M <: Function}
-    a = zeros(Vector3s{N})
-    @inbounds for i = 1:N
-        a[i] = forces[i] / m(i)
-    end
-    a
-end
 
 move!(::AbstractIntegrator) = error("Unimplemented")
 
-abstract type AbstractConstraint end
-
-struct FixedDistanceConstraint <: AbstractConstraint
-    i::Int
-    j::Int
-    distance::RealType
-end
+current_positions(::AbstractIntegrator) = error("Unimplemented")
+current_velocities(::AbstractIntegrator) = error("Unimplemented")
 
 end

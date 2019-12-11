@@ -1,6 +1,6 @@
 import LinearAlgebra: norm_sqr
 
-import MolecularDynamicsIntegrators.Bases: Vector3s
+import MolecularDynamicsIntegrators.Bases: Vector3
 
 @inline function lj_potential_fij(a, b)
     r = b - a
@@ -12,7 +12,7 @@ end
 
 function lj_potential_forces(r)
     N = length(r)
-    forces = zeros(Vector3s{N})
+    forces = zeros(Vector3, N)
     @inbounds @simd for i = 1:N - 2
         @simd for j = i + 2:N
             fij = lj_potential_fij(r[i], r[j])

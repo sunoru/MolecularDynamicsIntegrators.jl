@@ -1,14 +1,17 @@
 import ..Bases: RealType, Vector3s
-import ..Types: move!, acceleration
+import ..Types: move!
+import ..Utils: acceleration
 
 
-@inline function _move_half_step!(r::Vector3s{N}, v::Vector3s{N}, a::Vector3s{N}, dt::RealType) where N
+@inline function _move_half_step!(r::Vector3s, v::Vector3s, a::Vector3s, dt::RealType)
+    N = length(r)
     v .+= a * dt / 2
     r .+= v * dt
     r, v
 end
 
-@inline function _move_full_step!(r::Vector3s{N}, v::Vector3s{N}, a::Vector3s{N}, dt::RealType) where N
+@inline function _move_full_step!(r::Vector3s, v::Vector3s, a::Vector3s, dt::RealType)
+    N = length(r)
     v .+= a * dt / 2
     r, v
 end
@@ -29,5 +32,5 @@ function move!(integrator::VerletIntegrator)
     a = acceleration(fv, m)
     _move_full_step!(r, v, a, dt)
 
-    integrator
+    integrator, dt
 end

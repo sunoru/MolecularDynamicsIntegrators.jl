@@ -3,10 +3,13 @@ module MolecularDynamicsIntegrators
 import Reexport: @reexport
 
 include("./Bases.jl")
-@reexport using .Bases
+include("./Utils.jl")
 
 include("./Types.jl")
 @reexport using .Types
+
+include("./Constraints.jl")
+@reexport using .Constraints
 
 include("./Verlet/Verlet.jl")
 @reexport using .Verlet
