@@ -1,5 +1,5 @@
 import ..Bases: RealType, Vector3s
-import ..Types: AbstractIntegrator, current_positions, current_velocities
+import ..Types: AbstractIntegrator, current_positions, current_velocities, set_state!
 
 struct VerletIntegrator{M <: Function, F <: Function} <: AbstractIntegrator{M, F}
     positions::Vector3s
@@ -23,3 +23,8 @@ end
 current_positions(vi::VerletIntegrator) = vi.positions
 current_velocities(vi::VerletIntegrator) = vi.velocities
 
+function set_state!(vi::VerletIntegrator, rs::Vector3s, vs::Vector3s)
+    vi.positions .= rs
+    vi.velocities .= vs
+    vi
+end

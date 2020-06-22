@@ -1,6 +1,6 @@
 import ..Bases: RealType, Vector3s
 import ..Constraints: FixedDistanceConstraint
-import ..Types: AbstractIntegrator, current_positions, current_velocities
+import ..Types: AbstractIntegrator, current_positions, current_velocities, set_state!
 
 # The constraints can only be of the type that require fixed distances.
 struct RattleIntegrator{M <: Function, F <: Function} <: AbstractIntegrator{M, F}
@@ -18,7 +18,7 @@ struct RattleIntegrator{M <: Function, F <: Function} <: AbstractIntegrator{M, F
     forces::Vector3s
 end
 
-function RattleIntegrator(r, v, dt, m, f, ξ, max_iter, gs)
+function RattleIntegrator(r, v, dt, m, f, ξ, max_iter, gs = FixedDistanceConstraint[])
     N = length(r)
     @assert N === length(v)
     fs = f(r)
@@ -28,3 +28,9 @@ end
 
 current_positions(ri::RattleIntegrator) = ri.positions
 current_velocities(ri::RattleIntegrator) = ri.velocities
+
+function set_state!(ri::RattleIntegrator, rs::Vector3s, vs::Vector3s)
+    ri.positions .= rs
+    ri.velocities .= vs
+    ri
+end

@@ -1,6 +1,6 @@
 module Types
 
-export AbstractIntegrator, move!, current_positions, current_velocities
+export AbstractIntegrator, move!, current_positions, current_velocities, set_state!
 
 import ..Bases: RealType, Vector3s, Vector3
 
@@ -14,5 +14,6 @@ move!(::AbstractIntegrator) = error("Unimplemented")
 
 current_positions(::AbstractIntegrator) = error("Unimplemented")
 current_velocities(::AbstractIntegrator) = error("Unimplemented")
+set_state!(::AbstractIntegrator, rs::Vector3s, vs::Vector3s) = error("Unimplemented")
 
 end
