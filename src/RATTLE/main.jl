@@ -10,7 +10,7 @@ import ..Verlet
 
 @inline function _move_half_step!(
     r::Vector3s, v::Vector3s,
-    dt::RealType, tolerance::RealType, m::Function,
+    dt::RealType, tolerance::RealType, m::Function, dist::Function,
     max_iter::Int, last_r::Vector3s, constraints::Vector{FixedDistanceConstraint}
 )
     N = length(r)
@@ -28,8 +28,8 @@ import ..Verlet
             !(moved[i] || moved[j]) && continue
             d² = d ^ 2
             ξ = 2 * tolerance * d²
-            rij = last_r[i] - last_r[j]
-            s = r[i] - r[j]
+            rij = dist(last_r[i], last_r[j])
+            s = dist(r[i], r[j])
             rmi, rmj = 1 / m(i), 1 / m(j)
             c = norm_sqr(s) - d²
             if abs(c) ≥ ξ
@@ -52,7 +52,7 @@ end
 
 @inline function _move_full_step!(
     r::Vector3s, v::Vector3s,
-    tolerance::RealType, m::Function,
+    tolerance::RealType, m::Function, dist::Function,
     max_iter::Int, constraints::Vector{FixedDistanceConstraint}
 )
     N = length(r)
@@ -70,7 +70,7 @@ end
             !(moved[i] || moved[j]) && continue
             d² = d ^ 2
             ξ = tolerance * d²
-            rij = r[i] - r[j]
+            rij = dist(r[i], r[j])
             vij = v[i] - v[j]
             rmi, rmj = 1 / m(i), 1 / m(j)
             c = rij ⋅ vij
@@ -94,6 +94,7 @@ function move!(integrator::RattleIntegrator)
     dt = integrator.timestep
     m = integrator.mass_function
     f = integrator.force_function
+    dist = integrator.distance_function
     fv = integrator.forces
     max_iter = integrator.max_iterations
     constraints = integrator.constraints
@@ -103,12 +104,12 @@ function move!(integrator::RattleIntegrator)
 
     a = acceleration(fv, m)
     Verlet._move_half_step!(r, v, a, dt)
-    _move_half_step!(r, v, dt, tol, m, max_iter, last_r, constraints)
+    _move_half_step!(r, v, dt, tol, m, dist, max_iter, last_r, constraints)
 
     fv .= f(r)
     a = acceleration(fv, m)
     Verlet._move_full_step!(r, v, a, dt)
-    _move_full_step!(r, v, tol, m, max_iter, constraints)
+    _move_full_step!(r, v, tol, m, dist, max_iter, constraints)
 
     integrator, dt
 end
