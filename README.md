@@ -1,5 +1,7 @@
 # MolecularDynamicsIntegrators.jl
 
+![CI](https://github.com/sunoru/MolecularDynamicsIntegrators.jl/workflows/CI/badge.svg)
+
 Integrating algorithms for molecular dynamics simulations.
 
 Currently supported:
