@@ -22,11 +22,12 @@ struct RattleIntegrator{
     forces::Vector3s
 end
 
+# r_ij = r_i - r_j
 _default_distance() = (a::Vector3, b::Vector3) -> a - b
 
 function RattleIntegrator(
     r, v, dt, m, f, ξ, max_iter,
-    gs = FixedDistanceConstraint[],
+    gs = FixedDistanceConstraint[];
     distance = _default_distance()
 )
     N = length(r)
