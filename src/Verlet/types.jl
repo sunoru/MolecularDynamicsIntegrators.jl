@@ -1,10 +1,11 @@
-import ..Bases: RealType, Vector3s
+using MosimoBase: Vector3s
+
 import ..Types: AbstractIntegrator, current_positions, current_velocities, set_state!
 
 struct VerletIntegrator{M <: Function, F <: Function} <: AbstractIntegrator{M, F}
     positions::Vector3s
     velocities::Vector3s
-    timestep::RealType
+    timestep::Float64
 
     mass_function::M
     force_function::F

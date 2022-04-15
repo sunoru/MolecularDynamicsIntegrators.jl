@@ -1,7 +1,5 @@
 module Constraints
 
-import ..Bases: RealType
-
 export AbstractConstraint, FixedDistanceConstraint
 
 abstract type AbstractConstraint end
@@ -9,7 +7,7 @@ abstract type AbstractConstraint end
 struct FixedDistanceConstraint <: AbstractConstraint
     i::Int
     j::Int
-    distance::RealType
+    distance::Float64
 end
 
 end

@@ -1,38 +1,34 @@
-import Random
-import Test: @test
+using MolecularDynamicsIntegrators: move!, VerletIntegrator
 
-import MolecularDynamicsIntegrators: move!, VerletIntegrator
-import MolecularDynamicsIntegrators.Bases: Vector3
+@testset "Verlet" begin
+    Random.seed!(2017012811)
 
-Random.seed!(2017012811)
+    N = 3
+    r = [
+        Vector3(0, 0, 0),
+        Vector3(0, 1, 0),
+        Vector3(0, 1, 1)
+    ]
+    v = [rand(3) for _ in 1:N]
+    dt = 0.001
+    mass = i -> 1.0
+    force = lj_potential_forces
+    steps = 2000
 
-N = 3
-r = [
-    Vector3(0, 0, 0),
-    Vector3(0, 1, 0),
-    Vector3(0, 1, 1)
-]
-v = [rand(3) for _ in 1:N]
-dt = 0.001
-mass = i -> 1.0
-force = lj_potential_forces
-steps = 2000
+    setup = VerletIntegrator(r, v, dt, mass, force)
 
-setup = VerletIntegrator(r, v, dt, mass, force)
+    for i = 1:steps
+        move!(setup)
+    end
 
-@info "Testing VerletIntegrator..."
-
-for i = 1:steps
-    move!(setup)
+    @test vector_equal(setup.positions, [
+        [0.012925251233403398, 0.12468008323252931, 0.42136795208804606],
+        [0.6118280564741769, 2.5418601972010393, 1.7430189196629002],
+        [1.136453017521721, 3.511798489296003, 1.9158143836134611]
+    ])
+    @test vector_equal(setup.velocities, [
+        [-0.006794248644095888, -0.017369573618650585, 0.1533066209776989],
+        [0.305914028237079, 0.7709300986005134, 0.8715094598314336],
+        [0.581483383021656, 1.335608859882911, 0.5152845468730523]
+    ])
 end
-
-@test vector_equal(setup.positions, [
-    [0.9046459496087763, -0.14795147116821855, -0.48311455629751504],
-    [1.789111152976618, 2.8612241428150713, 0.27092667944587845],
-    [1.611354120760534, 2.865819353671669, 1.8015007201159405]
-])
-@test vector_equal(setup.velocities, [
-    [0.44612166649242696, -0.13022690285766972, -0.29141016315001966],
-    [0.8945555764882902, 0.9306120714075277, 0.13546333972293678],
-    [0.8118783686922247, 0.9891608441093953, 0.450603245059233]
-])

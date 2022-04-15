@@ -1,4 +1,5 @@
-import ..Bases: RealType, Vector3, Vector3s
+using MosimoBase: Vector3s, Vector3
+
 import ..Constraints: FixedDistanceConstraint
 import ..Types: AbstractIntegrator, current_positions, current_velocities, set_state!
 
@@ -9,13 +10,13 @@ struct RattleIntegrator{
 } <: AbstractIntegrator{M, F}
     positions::Vector3s
     velocities::Vector3s
-    timestep::RealType
+    timestep::Float64
 
     mass_function::M
     force_function::F
     distance_function::D
 
-    tolerance::RealType
+    tolerance::Float64
     max_iterations::Int
     constraints::Vector{FixedDistanceConstraint}
 

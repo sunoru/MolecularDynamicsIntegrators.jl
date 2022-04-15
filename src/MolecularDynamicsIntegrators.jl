@@ -2,7 +2,6 @@ module MolecularDynamicsIntegrators
 
 import Reexport: @reexport
 
-include("./Bases.jl")
 include("./Utils.jl")
 
 include("./Types.jl")

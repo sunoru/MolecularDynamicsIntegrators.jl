@@ -2,7 +2,7 @@ module Types
 
 export AbstractIntegrator, move!, current_positions, current_velocities, set_state!
 
-import ..Bases: RealType, Vector3s, Vector3
+using MosimoBase: Vector3s, Vector3
 
 # M: Mass function; F: Force function
 # Accept mass as a function (index -> value) instead of an array in order to perform better in special

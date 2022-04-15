@@ -1,6 +1,5 @@
 import LinearAlgebra: norm_sqr, ⋅
 
-import ..Bases: RealType, Vector3s
 import ..Constraints: FixedDistanceConstraint
 import ..Types: move!
 import ..Utils: acceleration
@@ -10,7 +9,7 @@ import ..Verlet
 
 @inline function _move_half_step!(
     r::Vector3s, v::Vector3s,
-    dt::RealType, tolerance::RealType, m::Function, dist::Function,
+    dt::Float64, tolerance::Float64, m::Function, dist::Function,
     max_iter::Int, last_r::Vector3s, constraints::Vector{FixedDistanceConstraint}
 )
     N = length(r)
@@ -52,7 +51,7 @@ end
 
 @inline function _move_full_step!(
     r::Vector3s, v::Vector3s,
-    tolerance::RealType, m::Function, dist::Function,
+    tolerance::Float64, m::Function, dist::Function,
     max_iter::Int, constraints::Vector{FixedDistanceConstraint}
 )
     N = length(r)

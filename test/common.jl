@@ -1,6 +1,7 @@
-import LinearAlgebra: norm_sqr
+using LinearAlgebra, Random, Test
+using LinearAlgebra: norm_sqr
 
-import MolecularDynamicsIntegrators.Bases: Vector3
+using MosimoBase
 
 @inline function lj_potential_fij(a, b)
     r = b - a

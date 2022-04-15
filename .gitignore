@@ -6,3 +6,4 @@ deps/deps.jl
 .idea/
 .vscode/
 *.swp
+Manifest.toml
