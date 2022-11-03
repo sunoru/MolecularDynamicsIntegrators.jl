@@ -1,5 +1,4 @@
-using LinearAlgebra, Random, Test
-using LinearAlgebra: norm_sqr
+using Random, Test
 
 using MosimoBase
 

@@ -1,6 +1,6 @@
 module MolecularDynamicsIntegrators
 
-import Reexport: @reexport
+using MosimoBase: @reexport
 
 include("./Utils.jl")
 

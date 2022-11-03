@@ -1,5 +1,3 @@
-using MosimoBase: Vector3s, Vector3
-
 import ..Constraints: FixedDistanceConstraint
 import ..Types: AbstractIntegrator, current_positions, current_velocities, set_state!
 
@@ -23,13 +21,10 @@ struct RattleIntegrator{
     forces::Vector3s
 end
 
-# r_ij = r_i - r_j
-_default_distance() = (a::Vector3, b::Vector3) -> a - b
-
 function RattleIntegrator(
     r, v, dt, m, f, ξ, max_iter,
     gs = FixedDistanceConstraint[];
-    distance = _default_distance()
+    distance = default_distance
 )
     N = length(r)
     @assert N === length(v)

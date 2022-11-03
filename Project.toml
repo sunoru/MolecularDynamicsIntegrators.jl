@@ -4,10 +4,11 @@ authors = ["Sunoru <s@sunoru.com>"]
 version = "0.2.0"
 
 [deps]
-LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 MosimoBase = "a39d5f18-f8b1-4777-8f97-f1f91469dbd0"
-Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
-StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
+
+[compat]
+julia = "1.7"
+MosimoBase = "0.2"
 
 [extras]
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"

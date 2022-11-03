@@ -1,4 +1,4 @@
-import LinearAlgebra: norm_sqr, ⋅
+using MosimoBase: norm_sqr
 
 import ..Constraints: FixedDistanceConstraint
 import ..Types: move!

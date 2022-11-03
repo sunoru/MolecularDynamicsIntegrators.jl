@@ -1,5 +1,3 @@
-using MosimoBase: Vector3s
-
 import ..Types: AbstractIntegrator, current_positions, current_velocities, set_state!
 
 struct VerletIntegrator{M <: Function, F <: Function} <: AbstractIntegrator{M, F}

@@ -1,6 +1,6 @@
 module Utils
 
-using MosimoBase: Vector3s, Vector3
+using MosimoBase
 
 @inline function acceleration(forces::Vector3s, m::Function)
     N = length(forces)
