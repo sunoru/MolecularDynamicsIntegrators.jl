@@ -2,15 +2,13 @@ import ..Types: move!
 import ..Utils: acceleration
 
 
-@inline function _move_half_step!(r::Vector3s, v::Vector3s, a::Vector3s, dt::Float64)
-    N = length(r)
+@inline function _move_half_step!(r::Vector{T}, v::Vector{T}, a::Vector{T}, dt::Float64) where {T}
     v .+= a * dt / 2
     r .+= v * dt
     r, v
 end
 
-@inline function _move_full_step!(r::Vector3s, v::Vector3s, a::Vector3s, dt::Float64)
-    N = length(r)
+@inline function _move_full_step!(r::Vector{T}, v::Vector{T}, a::Vector{T}, dt::Float64) where {T}
     v .+= a * dt / 2
     r, v
 end

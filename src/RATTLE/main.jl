@@ -1,17 +1,17 @@
-using MosimoBase: norm_sqr
+using LinearAlgebra: ⋅, norm_sqr
 
-import ..Constraints: FixedDistanceConstraint
+using ..Constraints: FixedDistanceConstraint
 import ..Types: move!
-import ..Utils: acceleration
+using ..Utils: acceleration
 
-import ..Verlet
+using ..Verlet: Verlet
 
 
 @inline function _move_half_step!(
-    r::Vector3s, v::Vector3s,
+    r::Vector{T}, v::Vector{T},
     dt::Float64, tolerance::Float64, m::Function, dist::Function,
-    max_iter::Int, last_r::Vector3s, constraints::Vector{FixedDistanceConstraint}
-)
+    max_iter::Int, last_r::Vector{T}, constraints::Vector{FixedDistanceConstraint}
+) where {T}
     N = length(r)
     K = length(constraints)
     moved = ones(Bool, N)
@@ -25,7 +25,7 @@ import ..Verlet
             constraint = constraints[ki]
             i, j, d = constraint.i, constraint.j, constraint.distance
             !(moved[i] || moved[j]) && continue
-            d² = d ^ 2
+            d² = d^2
             ξ = 2 * tolerance * d²
             rij = dist(last_r[i], last_r[j])
             s = dist(r[i], r[j])
@@ -50,10 +50,10 @@ end
 
 
 @inline function _move_full_step!(
-    r::Vector3s, v::Vector3s,
+    r::Vector{T}, v::Vector{T},
     tolerance::Float64, m::Function, dist::Function,
     max_iter::Int, constraints::Vector{FixedDistanceConstraint}
-)
+) where {T}
     N = length(r)
     K = length(constraints)
     moved = ones(Bool, N)
@@ -67,7 +67,7 @@ end
             constraint = constraints[ki]
             i, j, d = constraint.i, constraint.j, constraint.distance
             !(moved[i] || moved[j]) && continue
-            d² = d ^ 2
+            d² = d^2
             ξ = tolerance * d²
             rij = dist(r[i], r[j])
             vij = v[i] - v[j]
@@ -93,11 +93,11 @@ function move!(integrator::RattleIntegrator)
     dt = integrator.timestep
     m = integrator.mass_function
     f = integrator.force_function
-    dist = integrator.distance_function
+    dist = integrator.params.distance_function
     fv = integrator.forces
-    max_iter = integrator.max_iterations
-    constraints = integrator.constraints
-    tol = integrator.tolerance
+    max_iter = integrator.params.max_iterations
+    constraints = integrator.params.constraints
+    tol = integrator.params.ξ
 
     last_r = copy(r)
 

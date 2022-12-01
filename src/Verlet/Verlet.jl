@@ -1,7 +1,6 @@
 module Verlet
 
-using MosimoBase
-export VerletIntegrator
+export VerletIntegrator, VerletParameters
 include("./types.jl")
 include("./main.jl")
 

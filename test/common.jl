@@ -1,6 +1,8 @@
+using LinearAlgebra: norm_sqr
+using StaticArrays
 using Random, Test
 
-using MosimoBase
+const Vector3 = SVector{3, Float64}
 
 @inline function lj_potential_fij(a, b)
     r = b - a
@@ -21,12 +23,4 @@ function lj_potential_forces(r)
         end
     end
     forces
-end
-
-function vector_equal(a, b, tol=1e-5)
-    N = length(a)
-    @inbounds for i = 1:N
-        all(abs.(a[i] - b[i]) .≤ tol) || return false
-    end
-    true
 end

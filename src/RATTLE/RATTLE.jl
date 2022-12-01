@@ -1,7 +1,6 @@
 module RATTLE
 
-using MosimoBase
-export RattleIntegrator
+export RattleIntegrator, RattleParameters
 include("./types.jl")
 include("./main.jl")
 

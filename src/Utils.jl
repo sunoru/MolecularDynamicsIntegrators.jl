@@ -1,10 +1,8 @@
 module Utils
 
-using MosimoBase
-
-@inline function acceleration(forces::Vector3s, m::Function)
+@inline function acceleration(forces::Vector{T}, m::Function) where T
     N = length(forces)
-    a = zeros(Vector3, N)
+    a = zeros(T, N)
     @inbounds for i = 1:N
         a[i] = forces[i] / m(i)
     end

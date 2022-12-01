@@ -1,19 +1,16 @@
 module Types
 
-export AbstractIntegrator, move!, current_positions, current_velocities, set_state!
+export AbstractIntegrator, move!, current_positions, current_velocities, set_state!,
+    IntegratorParameters
 
-using MosimoBase
-
-# M: Mass function; F: Force function
-# Accept mass as a function (index -> value) instead of an array in order to perform better in special
-# cases like that all the masses are the same.
-abstract type AbstractIntegrator{M <: Function, F <: Function} end
-
+abstract type AbstractIntegrator end
 
 move!(::AbstractIntegrator) = error("Unimplemented")
 
 current_positions(::AbstractIntegrator) = error("Unimplemented")
 current_velocities(::AbstractIntegrator) = error("Unimplemented")
-set_state!(::AbstractIntegrator, rs::Vector3s, vs::Vector3s) = error("Unimplemented")
+set_state!(::AbstractIntegrator, rs, vs) = error("Unimplemented")
+
+abstract type IntegratorParameters end
 
 end
