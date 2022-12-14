@@ -1,7 +1,7 @@
 name = "MolecularDynamicsIntegrators"
 uuid = "293f545e-9dd2-11e9-1210-cf5bcdc9c322"
 authors = ["Sunoru <s@sunoru.com>"]
-version = "0.2.0"
+version = "0.1.0"
 
 [deps]
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
